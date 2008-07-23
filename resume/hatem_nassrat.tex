@@ -1,0 +1,194 @@
+% LaTeX resume using res.cls
+\documentclass[line,margin]{res} 
+\usepackage{fancyhdr}
+\usepackage{helvetica} % uses helvetica postscript font (download helvetica.sty)
+%\usepackage{newcent}   % uses new century schoolbook postscript font 
+
+\fancypagestyle{plain}{%
+\textheight 660pt
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[R]{\smallskip {\tiny Powered by \LaTeX} } % except the right 
+\fancyfootoffset[R]{42pt}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+\pagestyle{plain}
+
+\begin{document}
+
+\name{Hatem A. Nassrat}
+% \address used twice to have two lines of address
+\address{3139 Veith St., Halifax, NS B3K 3G9}
+\address{(902) 489-2557 or (902) 444-4974}
+
+ 
+\begin{resume}
+ 
+\section{OBJECTIVE}       
+    A position in the field of computers with special 
+    interests in database development {\&} integration, 
+    information retrieval {\&} processing, and the ability to
+    research {\&} innovate in the various fields of computer
+    science.
+ 
+% \sl will be bold italic in New Century Schoolbook (or
+% any postscript font) and just slanted in
+% Computer Modern (default) font
+ 
+\section{EDUCATION} 
+    {\sl Masters of Applied Computer Science} \hfill expected August 2008\\
+        Dalhousie University \hfill Halifax, NS\\
+        Concentration: Data Representation, Databases, 
+        Web Interfaces.  \medskip 
+    \newline 
+    {\sl Bachelor of Computer Science} \hfill May 2006\\
+        Dalhousie University \hfill Halifax, NS 
+ 
+ 
+\section{COMPUTER \\ SKILLS} 
+    {\sl Languages \hspace{35pt}}:
+     C/++, Python, Perl, HTML, JavaScript, Java/JSP, PHP, SQL.\\
+    {\sl Operating Systems }:
+     Linux/Unix, Windows, OS X. \\
+    {\sl Architectures \hspace{27pt}}: 
+     Worked on high performance clusters during my stay at \\
+     \hspace*{92pt} Dalhousie. 
+
+
+\section{EXPERIENCE} 
+   {\sl Software Engineer} \hfill Sept 2007 - Present \\
+    IT Interactive Service (Genieknows.com) \hfill Halifax, NS \\
+    Research {\&} Development Department \smallskip
+    \begin{itemize}  \itemsep -2pt % reduce space between items
+     \item Developed interface functionality for
+             http://local.genieknows.com.
+     \item Developed back end modules for the various search
+             engines being developed by Genieknows.com.
+     \item Investigated and Presented various research topics
+             in the fields of information retrieval.
+     \item {\bf Technologies:} \hspace{1pt} 
+        Perl, Python, C/++, PHP, Javascript, Unix.
+    \end{itemize}
+
+   {\sl Web Programmer} \hfill June 2007 - Sept 2007 \\
+    ArtistXite.com \hfill Halifax, NS \smallskip
+    \begin{itemize}  \itemsep -2pt % reduce space between items
+     \item Developed interface and backend functionality to display 
+               web traffic statistics.
+     \item Developed a system to upload videos and encode them
+                into flash video format.
+     \item Worked on various areas of the website regarding user 
+               functionality (for artists and record labels).
+     \item {\bf Technologies:}\hspace{4pt} 
+        MySQL, Perl, PHP, Javascript, FFMpeg, Unix.
+    \end{itemize}
+
+   {\sl Masters Student} \hfill Aug 2007 - Present \\
+     Dalhousie University \hfill Halifax, NS \smallskip
+      \begin{itemize}  \itemsep -2pt % reduce space between items
+       \item Worked on the DDB2 (DDB project extension)
+       towards my Masters Thesis.
+       \item {\bf Technologies:} \hspace{1pt} 
+        Python, Python Ctypes, Pylons, SqlAlchemy, Maco, JSON, \newline 
+        \hspace*{72pt} XML, SQLite, PostgreSql, 
+        (Li$|$U)nix.
+    \end{itemize} 
+
+    {\sl Python/Web Developer} \hfill June 2006 - Aug 2007 \\
+    D-Drive Lab, Dalhousie University FCS \hfill Halifax, NS \\
+    Design Database Project (http://designtheory.org/ddb)\\
+    Satellite Project of designtheory.org, 
+    Queen Mary University \hfill London, UK \smallskip
+        \begin{itemize}  \itemsep -2pt % reduce space between items
+    \item Developed a python web application that connects to an Sqlite
+    database \\ containing statistical designs.
+    \item Assisted in the design of a database schema to store the available
+    statistical t-designs.
+        \end{itemize}
+
+\end{resume}
+
+\newpage
+
+\name{Hatem A. Nassrat}
+% \address used twice to have two lines of address
+\address{3139 Veith St., Halifax, NS B3K 3G9}
+\address{(902) 489-2557 or (902) 444-4974}
+
+\begin{resume}
+\addvspace{\sectionskip}
+
+        \begin{itemize}  \itemsep -2pt % reduce space between items
+    \item Used a state of the art pythonic web framework (Cherrypy 3.0), 
+    along with other, such as a templating language, to develop the design 
+    database browser. 
+    \item {\bf Technologies:} \hspace{1pt} 
+        Python, Cherrypy 3.0, Genshi, HTML, SQLite, XML, \newline
+        \hspace*{72pt} Shell (Unix) Scripting, Apache, SVN, Mercurial.
+        \end{itemize}
+
+    {\sl Oracle/Java Developer} \hfill July 2005 - Aug 2005
+    Kuwait Oil Company  (IT Department) \hfill  Ahmadi, Kuwait
+    \smallskip
+        \begin{itemize}  \itemsep -2pt % reduce space between items
+    \item Trained on the KOC oracle database.
+    \item Assisted in the development of in-house applications written to
+        browse and \\ modify different database tables and views.
+    \item Assisted in the compiling of reports from data within the database
+        and across multiple spreadsheets.
+    \item {\bf Technologies:} \hspace{3pt}
+        Oracle, Oracle Developer (IDE), Java, Microsoft Excel.
+        \end{itemize}
+
+    {\sl Web Developer} \hfill July 2004 - Aug 2004
+    Beshara Group \hfill Kuwait City, Kuwait
+    \smallskip
+        \begin{itemize}  \itemsep -2pt % reduce space between items
+    \item Designed and developed a website in JSP for the Ministry of
+        Communications Kuwait (moc.kw). The website allowed for online
+        application submissions for services provided by the ministry.
+    \item Assisted in developing a Java application allowing conversion of data
+        from one character set to another (required by a certain Xerox bill
+        printer).
+    \item {\bf Technologies:} \hspace{3pt}
+        Oracle, Oracle Developer (IDE), J2EE, J2SE, Apache.
+        \end{itemize}
+    
+    {\sl Application Tester} \hfill Jan 2003 \\
+    Jawa Corp \hfill Kuwait City, Kuwait \smallskip
+        \begin{itemize}  \itemsep -2pt % reduce space between items
+    \item Trained on and manually user tested various components of Jawa
+    Corp's \\ software, identifying/verifying various bugs in there
+    systems.
+    \item {\bf Technologies:} \hspace{1pt}
+        Jawa Corp's In-House Software (Accounting, Inventory, and \newline
+        \hspace*{72pt} Point of Sale Systems).
+        \end{itemize}
+
+\section{COMMUNITY \\ SERVICE}
+    {\sl Web Developer and IT Technician} \hfill Sept 2003 - May 2004 \\
+    Entrepreneurs' Society (American University in Cairo) \hfill Cairo, Egypt \smallskip
+        \begin{itemize}  \itemsep -2pt % reduce space between items
+\item Worked with a team to build a website in PHP used by the society to
+    inform potential and current members
+\item Developed entrepreneurial simulations used by the society in the 
+    03/04 \\ conference allowing participants to compete through simulated 
+    business \\ ventures
+    \item {\bf Technologies:} \hspace{1pt}
+        PHP, MySQL, Apache, IIS, Windows Networking.
+        \end{itemize}
+
+\section{HOBBIES}
+    Sports (Everything especially football and basketball), Driving,
+    Diving/Snorkelling, \\ and Electronics.
+ 
+
+\end{resume}
+\end{document}
+
+
+
+
+
+
+
