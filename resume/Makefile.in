@@ -1,8 +1,8 @@
 # UTILPATH=$(HOME)/projects/ddb2/thesis/utils
 
 # set latexfile to the name of the main file without the .tex
-origfile = hatem_nassrat 
-latexfile = $(origfile)_
+origfile=hatem_nassrat
+latexfile=$(origfile)_
 # put the names of figure files here.  include the .eps
 #figures = abc.eps
 TEX = latex
@@ -49,7 +49,7 @@ ps : $(origfile).ps
 $(origfile).tar.gz : $(figures) $(origfile).tex
 	tar -czvf $@ *
 	mkdir -p $(origfile)
-	tar -xvf $@ -C $(origfile)/ 
+	tar -xvf $@ -C $(origfile)/
 	tar -czvf $@ $(origfile)/
 
 tarball: $(origfile).tar.gz
