@@ -1,39 +1,60 @@
-origfile=hatem_nassrat
+resume=hatem_nassrat
+cover=$(resume)_cover_letter
 build=build
 TEXF=$(build)/helvetica.sty  $(build)/res.cls
-OBJS=$(build)/$(origfile).tex $(TEXF)
+OBJS=$(build)/$(resume).tex $(TEXF) $(build)/$(cover).tex
 MIN=Makefile.in
 MOUT=$(build)/Makefile
 
+usage:
+	@echo The following targets are acceptable
+	@echo
+	@echo apdf advi aps ahtml tarball dvi pdf ps html cdvi cpdf cps chtml
+	@echo
+	@echo All the targets starting with \"a\" create both resume and cover
+	@echo letter while the ones without a prefix only create the resume
+	@echo and the remainder only create the cover letter.
+	@echo 
+	@echo tarball creates a tarball of both tex files and dependencies
+	@echo 
 
-dvi : $(origfile).dvi
+.PHONY: apdf advi aps ahtml tarball dvi pdf ps html cdvi cpdf cps chtml
 
-$(origfile).dvi: $(OBJS) $(MOUT)
-	cd $(build); make -w dvi
+apdf: pdf cpdf
+advi: dvi cdvi
+aps: ps cps
+ahtml: html chtml
+tarball: $(resume).tar.gz
+
+dvi : $(resume).dvi
+pdf : $(resume).pdf
+ps : $(resume).ps
+html: $(resume).html
+
+cdvi : $(cover).dvi
+cpdf : $(cover).pdf
+cps : $(cover).ps
+chtml: $(cover).html
+
+%.dvi: $(OBJS) $(MOUT)
+	cd $(build); make -w $@ 
 	cp $(build)/$@ ./
 
-pdf : $(origfile).pdf
-
-$(origfile).pdf: $(OBJS) $(MOUT)
-	cd $(build); make -w pdf
+%.pdf: $(OBJS) $(MOUT)
+	cd $(build); make -w $@
 	cp $(build)/$@ ./
 
-ps : $(origfile).ps
-
-$(origfile).ps: $(OBJS) $(MOUT)
-	cd $(build); make -w ps
+%.ps: $(OBJS) $(MOUT)
+	cd $(build); make -w $@
 	cp $(build)/$@ ./
 
-tarball: $(origfile).tar.gz
-
-$(origfile).tar.gz: clean $(TEXF) $(OBJS) $(MOUT)
-	cd $(build); make -w tarball
+%.html: $(HOBJS) $(OBJS) $(MOUT)
+	echo "Not Yet Implemented" && -1
+	cd $(build); make -w $@
 	cp $(build)/$@ ./
 
-html: $(origfile).html
-
-$(origfile).html: $(HOBJS) $(OBJS) $(MOUT)
-	cd $(build); make -w html
+%.tar.gz: clean $(TEXF) $(OBJS) $(MOUT)
+	cd $(build); make -w $@
 	cp $(build)/$@ ./
 
 $(build)/%: %
@@ -43,11 +64,12 @@ $(build)/%: %
 $(MOUT): $(MIN)
 	mkdir -p $(build)
 	cp $(MIN) $(MOUT)
-# 	cp $< $@
 
 clean:
 	rm -fr $(build)
 
-spotless: clean
-	rm -fr $(origfile).pdf $(origfile).ps $(origfile).dvi \
-	$(origfile).tar.gz
+distclean: clean
+	rm -fr $(resume).pdf $(resume).ps $(resume).dvi $(resume).tar.gz
+	rm -fr $(cover).pdf $(cover).ps $(cover).dvi $(cover).tar.gz
+
+# vim: set noet:
