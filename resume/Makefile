@@ -1,8 +1,9 @@
 resume=hatem_nassrat
 cover=$(resume)_cover_letter
 build=build
-TEXF=$(build)/helvetica.sty  $(build)/res.cls
-OBJS=$(build)/$(resume).tex $(TEXF) $(build)/$(cover).tex
+TEXF=helvetica.sty  res.cls
+HUTIL=tth2html.py
+OBJS=${addprefix $(build)/, $(resume).tex $(TEXF) $(cover).tex}
 MIN=Makefile.in
 MOUT=$(build)/Makefile
 
@@ -48,8 +49,7 @@ chtml: $(cover).html
 	cd $(build); make -w $@
 	cp $(build)/$@ ./
 
-%.html: $(HOBJS) $(OBJS) $(MOUT)
-	echo "Not Yet Implemented" && -1
+%.html: $(HOBJS) $(OBJS) $(MOUT) $(HUTIL)
 	cd $(build); make -w $@
 	cp $(build)/$@ ./
 

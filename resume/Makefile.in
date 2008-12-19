@@ -1,7 +1,7 @@
 resume=hatem_nassrat
 cover=$(resume)_cover_letter
 TEX = latex
-# UTILPATH=path/to/utils
+UTIL=../tth2html.py
 
 all: $(resume).pdf $(cover).pdf
 
@@ -32,13 +32,10 @@ all: $(resume).pdf $(cover).pdf
 	tar -xvf $@ -C $*/
 	tar -czvf $@ $*/
 
-%.html : %_.dvi
-	cp $*_.aux $*_html.aux
-	cp $*_.bbl $*_html.bbl
-	cp $*_.toc $*_html.toc
-# 	$(UTILPATH)/pre_tex_html.py <$*_.tex >$*_html.tex
-# 	tth -w2 -y3 -u $*_html
-# 	$(UTILPATH)/fix_html.py ext-rep.inc.html <$*_html.html >$*.html
+%.html : %.tex
+	tth -w2 -y3 -u $<
+	$(UTIL) <$@ >$@.tmp
+	mv $@.tmp $@
 
 clean:
 	rm -f *_.*
