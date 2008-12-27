@@ -20,7 +20,12 @@ for line in sys.stdin:
     elif '<title>' in line:
         myprint('''
         <style type="text/css">
-        body {width: 700px; margin: 0 auto; font-family:sans-serif;}
+        body {
+            width: 90%;
+            margin: 0 auto;
+            font-family:sans-serif;
+            font-size:60%;
+        }
         div.textsection { margin-left: 2em; }
         td.tech { vertical-align: top; }
         td.techval { padding-left: 1em; }
