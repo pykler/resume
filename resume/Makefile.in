@@ -47,7 +47,7 @@ all: $(resume).pdf $(cover).pdf
 
 %.html : %.tex
 	tth -w2 -y3 -u $<
-	$(SANEHTML) <$@ >$@.tmp
+	$(SANEHTML) --big <$@ >$@.tmp
 	mv $@.tmp $@
 
 clean:
