@@ -1,8 +1,64 @@
 #!/usr/bin/env python
 
 import sys
+from optparse import OptionParser
+
+usage = "usage: %prog [options] <infile.html >outfile.html"
+
+parser = OptionParser(usage=usage)
+parser.add_option(
+    "-B", "--big", action="store_true", dest="big", default=False,
+    help="Write out big legible html"
+)
+parser.add_option(
+    "-p", "--public", action="store_true", dest="public", default=False,
+    help="Remove address and phone, add email as link"
+)
+(options, args) = parser.parse_args()
+
 
 title = 'Hatem Nassrat - Resume'
+body_css = '''
+        body {
+            margin: 0 auto; %s
+        } '''
+if options.big:
+    body_css = body_css % '''
+            width: 768px;
+            font-family:sans-serif;'''
+else:
+    body_css = body_css % '''
+            width: 90%;
+            font-family:sans-serif;
+            font-size:60%;'''
+
+main_css = '''
+        <style type="text/css"> 
+        %s
+        div.textsection { margin-left: 2em; }
+        td.tech { vertical-align: top; }
+        td.techval { padding-left: 1em; }
+        span.nowrap { white-space: nowrap; margin-left: 0.5em; }
+        .flr { float: right; }
+        li.nobul { list-style: none; margin-left: -1.3em; }
+        ul { text-indent: -1.1em; list-style-position: inside; }
+        .w3clinks { border:0;height:25px; }
+        a { color: #336699; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        </style> ''' % body_css
+
+valid_links = '''<div class="flr">
+    <a href="http://jigsaw.w3.org/css-validator/check">
+        <img class="w3clinks"
+            src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+        alt="Valid CSS!" />
+    </a>
+    <a href="http://validator.w3.org/check?uri=referer">
+        <img class="w3clinks"
+            src="http://www.w3.org/Icons/valid-xhtml10-blue"
+            alt="Valid XHTML 1.0 Transitional" />
+    </a>
+</div>'''
 
 def myprint(*args):
     ''' Print the string s to stdout '''
@@ -14,37 +70,44 @@ tecli = []
 words = []
 cwords = []
 cskills = [[]]
+dtd = False
 for line in sys.stdin:
-    if '<body>' in line:
-        myprint('<body>\n', '<h1 align="center">Hatem Nassrat</h1>\n')
+    if not dtd and line.strip().startswith('"DTD/'):
+        dtd = True
+        myprint('   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n')
+    elif '<body>' in line:
+        myprint('<body>\n', '<h1 align="center">')
+        if options.public:
+            myprint('''<script type="text/javascript">
+                <!--
+                var s="=b!isfg>#nbjmup;iobttsbuAhnbjm/dpn#?Ibufn!Obttsbu=0b?";
+                m=""; for (i=0; i<s.length; i++) m+=String.fromCharCode(s.charCodeAt(i)-1); document.write(m);
+                //-->
+                </script>
+                <ins><noscript>
+                <a href="#Enable JS for contact info" title="Enable JavaScript to see my email">Hatem Nassrat</a>
+                </noscript></ins>''')
+        else:
+            myprint('<a href="mailto:hnassrat@gmail.com">Hatem Nassrat</a>')
+        myprint('</h1>')
+    elif options.public and line.strip().startswith('<h3') and (
+        'B3K' in line or '(902)' in line or 'hnassrat@' in line):
+        pass
     elif '<title>' in line:
-        myprint('''
-        <style type="text/css">
-        body {
-            width: 90%;
-            margin: 0 auto;
-            font-family:sans-serif;
-            font-size:60%;
-        }
-        div.textsection { margin-left: 2em; }
-        td.tech { vertical-align: top; }
-        td.techval { padding-left: 1em; }
-        nobr { white-space: nowrap; margin-left: 0.5em; }
-        span.flr { float: right; }
-        </style>
-        ''')
+        myprint(main_css)
         myprint('<title>%s</title>\n' %title)
+        myprint('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />\n')
     else:
         if state == 2 and ('tth_sEc' in line or 'File translated from' in line):
             myprint('<!-- END of SECTION --> </div>\n')
         if 'Technologies:' in line:
             tecli.append(
-                '<table><tr><td class="tech"><b>Technologies:</b></td>' \
-                '<td class=techval>'
+                '<li class="nobul"><table><tr><td class="tech"><b>Technologies:</b></td>' \
+                '<td class="techval">'
             )
         elif tecli:
             if '</li>' in line:
-                tecli.append('</td>')
+                tecli.append('</td></tr></table></li>')
                 myprint('\n'.join(tecli))
                 tecli = []
             else:
@@ -58,7 +121,7 @@ for line in sys.stdin:
                         ])
                     if not line.endswith('</font\n'):
                         tecli.append(
-                            '<nobr>%s</nobr>' %('</nobr><nobr>'.join(words))
+                            '<span class="nowrap">%s</span>' %('</span><span class="nowrap">'.join(words))
                         )
                         words = []
 
@@ -80,7 +143,7 @@ for line in sys.stdin:
                 'Worked on' in cwords[-1] and 'Dalhousie' not in cwords[-1]
             ):
                 cskills[-1].append(
-                    '<nobr>%s</nobr>' %('</nobr><nobr>'.join(cwords))
+                    '<span class="nowrap">%s</span>' %('</span><span class="nowrap">'.join(cwords))
                 )
                 cwords = []
                 if len(cskills) == 3:
@@ -98,6 +161,8 @@ for line in sys.stdin:
         elif '</h2>' in line:
             myprint(line[1:].replace('<br />', ''))
         elif not tecli:
+            if '</body>' in line:
+                myprint(valid_links)
             myprint(line) #.replace('<br />',''))
         if 'tth_sEc' in line:
             state=1
