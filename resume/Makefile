@@ -15,16 +15,16 @@ usage:
 	@echo All the targets starting with \"a\" create both resume and cover
 	@echo letter while the ones without a prefix only create the resume
 	@echo and the remainder only create the cover letter.
-	@echo 
+	@echo
 	@echo tarball creates a tarball of both tex files and dependencies
-	@echo 
+	@echo
 
 .PHONY: apdf advi aps ahtml tarball dvi pdf ps html cdvi cpdf cps chtml
 
-apdf: pdf cpdf
+apdf: pdf cpdf ppdf
 advi: dvi cdvi
 aps: ps cps
-ahtml: html chtml
+ahtml: html chtml phtml
 tarball: $(resume).tar.gz
 
 dvi : $(resume).dvi
@@ -37,8 +37,20 @@ cpdf : $(cover).pdf
 cps : $(cover).ps
 chtml: $(cover).html
 
+phtml: hatem-nassrat-resume.html hatem-nassrat-resume-small-public.html
+ppdf : hatem-nassrat-resume.pdf
+
+hatem-nassrat-resume.pdf: $(resume)_public.pdf
+	mv $< $@
+
+hatem-nassrat-resume.html: $(resume)_public.html
+	mv $< $@
+
+hatem-nassrat-resume-small-public.html: $(resume)_small_pub.html
+	mv $< $@
+
 %.dvi: $(OBJS) $(MOUT)
-	cd $(build); make -w $@ 
+	cd $(build); make -w $@
 	cp $(build)/$@ ./
 
 %.pdf: $(OBJS) $(MOUT)
@@ -69,7 +81,6 @@ clean:
 	rm -fr $(build)
 
 distclean: clean
-	rm -fr $(resume).pdf $(resume).ps $(resume).dvi $(resume).tar.gz
-	rm -fr $(cover).pdf $(cover).ps $(cover).dvi $(cover).tar.gz
+	rm -fr hatem*.pdf hatem*.ps hatem*.dvi hatem*.tar.gz hatem*.html
 
 # vim: set noet:

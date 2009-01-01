@@ -1,9 +1,13 @@
 resume=hatem_nassrat
 cover=$(resume)_cover_letter
 TEX = latex
-UTIL=../tth2html.py
+PUBLICFILT=../public_filter.py
+SANEHTML=../tth2html.py
 
 all: $(resume).pdf $(cover).pdf
+
+%_public.tex: %.tex
+	$(PUBLICFILT) <$< >$@
 
 %_.% : %.%
 	cp $< $@
@@ -32,9 +36,18 @@ all: $(resume).pdf $(cover).pdf
 	tar -xvf $@ -C $*/
 	tar -czvf $@ $*/
 
+%_public.html : %_public.tex
+	tth -w2 -y3 -u $<
+	$(SANEHTML) --public --big <$*_public.html >$@.tmp
+	mv $@.tmp $@
+
+%_small_pub.html : %_public.tex
+	tth -w2 -y3 -u $<
+	$(SANEHTML) --public <$*_public.html >$@
+
 %.html : %.tex
 	tth -w2 -y3 -u $<
-	$(UTIL) <$@ >$@.tmp
+	$(SANEHTML) <$@ >$@.tmp
 	mv $@.tmp $@
 
 clean:
