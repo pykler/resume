@@ -9,7 +9,7 @@ all: $(resume).pdf $(cover).pdf
 %_public.tex: %.tex
 	$(PUBLICFILT) <$< >$@
 
-%_.% : %.%
+%_.tex : %.tex
 	cp $< $@
 
 %_.dvi : %_.tex
@@ -27,7 +27,11 @@ all: $(resume).pdf $(cover).pdf
 	if( ! echo `uname -a` | grep -i darwin >/dev/null) then \
 	ps2pdf $*.ps $*.pdf; fi
 
-%.ps : %.dvi
+%.dvi : %_.dvi
+	cp $< $@
+
+%.ps : %_.dvi
+	cp $*_.dvi $*.dvi
 	dvips $*
 
 %.tar.gz : %.tex
