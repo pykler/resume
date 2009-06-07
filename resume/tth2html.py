@@ -33,7 +33,7 @@ else:
             font-size:60%;'''
 
 main_css = '''
-        <style type="text/css"> 
+    <style type="text/css"> 
         %s
         div.textsection { margin-left: 2em; }
         td.tech { vertical-align: top; }
@@ -45,7 +45,30 @@ main_css = '''
         .w3clinks { border:0;height:25px; }
         a { color: #336699; text-decoration: none; }
         a:hover { text-decoration: underline; }
-        </style> ''' % body_css
+
+        /* Menu CSS */
+        .vert_menu { 
+            list-style: none;
+            text-indent: 0; 
+            position: fixed; top: 1em; right: 1em;
+            opacity:.40;filter:alpha(opacity=40);-moz-opacity:0.4;
+        }
+        .vert_menu li a {
+            font-size: 10pt;
+            display: block;
+            border: 1px dotted #336699;
+            padding: 5px 0px 2px 4px;
+            text-decoration: none;
+            text-align:center;
+            color: #666666;
+            width:178px;
+        }
+        .vert_menu li a:hover, .vert_menu li a:focus {
+            color: #000000;
+            font-weight:bold;
+            letter-spacing:1px;
+        }
+    </style> ''' % body_css
 
 valid_links = '''<div class="flr">
     <a href="http://jigsaw.w3.org/css-validator/check">
@@ -70,13 +93,15 @@ tecli = []
 words = []
 cwords = []
 cskills = [[]]
+sections = [('', 'Back to the Top')]
 dtd = False
+section_id = section_title = None
 for line in sys.stdin:
     if not dtd and line.strip().startswith('"DTD/'):
         dtd = True
         myprint('   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\n')
     elif '<body>' in line:
-        myprint('<body>\n', '<h1 align="center">')
+        myprint('<body>', '<h1 align="center">')
         if options.public:
             myprint('''<script type="text/javascript">
                 <!--
@@ -154,18 +179,28 @@ for line in sys.stdin:
                     myprint('</table>\n')
                 else:
                     cskills.append([])
+        # Work and Education Dates
         elif '<i>' in line and '200' in line: #200X watch out in 2010+ (bugs)
             ind = line.index('</i>')+4
             l1, l2 = '%s <br />' %(line[:ind]), line[ind:].replace('<br />', '')
             myprint('<span class="flr">%s</span>\n' %(l2), l1)
         elif '</h2>' in line:
             myprint(line[1:].replace('<br />', ''))
+            # Get section title
+            section_title = \
+                line.split(';')[2].split('</h2')[0].replace('<br />','').strip()
+            print >>sys.stderr, section_title, line
+            sections.append((section_id, section_title))
         elif not tecli:
             if '</body>' in line:
                 myprint(valid_links)
-            myprint(line) #.replace('<br />',''))
+                myprint('<ul class="vert_menu">\n%s\n</ul>' %'\n'.join([
+                        '<li><a href="#%s">%s</a></li>' %x for x in sections]))
+            myprint(line)
         if 'tth_sEc' in line:
             state=1
+            # Get section id
+            section_id = line.split('"')[1].strip()
         elif state == 1 and '</h2>' in line:
             myprint('<div class="textsection">\n')
             state = 2
