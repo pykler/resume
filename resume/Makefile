@@ -10,7 +10,7 @@ MOUT=$(build)/Makefile
 usage:
 	@echo The following targets are acceptable
 	@echo
-	@echo apdf advi aps ahtml tarball dvi pdf ps html cdvi cpdf cps chtml
+	@echo apdf advi aps ahtml tarball dvi pdf ppdf ps html phtml cdvi cpdf cps chtml
 	@echo
 	@echo All the targets starting with \"a\" create both resume and cover
 	@echo letter while the ones without a prefix only create the resume
