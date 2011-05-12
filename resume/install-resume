@@ -3,6 +3,9 @@
 public_resume=(hatem-nassrat-resume.html hatem-nassrat-resume.pdf hatem-nassrat-resume-small-public.html)
 private_resume=(hatem_nassrat.doc hatem_nassrat.html hatem_nassrat.odt hatem_nassrat.pdf hatem_nassrat.tex)
 
-rsync --progress ${public_resume[@]} nassrat@torch.cs.dal.ca:public_html/
-rsync --progress ${public_resume[@]} nassrato@nassrat.ca:www/ca/
-rsync --progress ${private_resume[@]} nassrato@nassrat.ca:www/ca/resume/
+# rsync --progress ${public_resume[@]} nassrat@torch.cs.dal.ca:public_html/
+# rsync --progress ${public_resume[@]} nassrato@nassrat.ca:www/ca/
+# rsync --progress ${private_resume[@]} nassrato@nassrat.ca:www/ca/resume/
+
+echo "USE ./distribute.sh"
+exit 1
