@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import re
 import sys
 from optparse import OptionParser
 
@@ -16,6 +17,11 @@ parser.add_option(
 )
 (options, args) = parser.parse_args()
 
+# all my dates are 2000+
+# 2XXX watch out year 3000+ (bugs)
+year_re = re.compile(r'\b2\d{3}\b')
+slug_re = re.compile(r'\W+')
+slugify = lambda s: slug_re.sub('-', s)
 
 title = 'Hatem Nassrat - Resume'
 body_css = '''
@@ -33,7 +39,7 @@ else:
             font-size:60%;'''
 
 main_css = '''
-    <style type="text/css"> 
+    <style type="text/css">
         %s
         div.textsection { margin-left: 2em; }
         td.tech { vertical-align: top; }
@@ -47,9 +53,9 @@ main_css = '''
         a:hover { text-decoration: underline; }
 
         /* Menu CSS */
-        .vert_menu { 
+        .vert_menu {
             list-style: none;
-            text-indent: 0; 
+            text-indent: 0;
             position: fixed; top: 1em; right: 1em;
             opacity:.40;filter:alpha(opacity=40);-moz-opacity:0.4;
         }
@@ -89,6 +95,7 @@ def myprint(*args):
         sys.stdout.write(s)
 
 state = 0
+buffer = []
 tecli = []
 words = []
 cwords = []
@@ -123,8 +130,11 @@ for line in sys.stdin:
         myprint('<title>%s</title>\n' %title)
         myprint('<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />\n')
     else:
+        # Pre Big if
         if state == 2 and ('tth_sEc' in line or 'File translated from' in line):
             myprint('<!-- END of SECTION --> </div>\n')
+
+        # Big if
         if 'Technologies:' in line:
             tecli.append(
                 '<li class="nobul"><table><tr><td class="tech"><b>Technologies:</b></td>' \
@@ -180,27 +190,32 @@ for line in sys.stdin:
                 else:
                     cskills.append([])
         # Work and Education Dates
-        elif '<i>' in line and '200' in line: #200X watch out in 2010+ (bugs)
+        elif '<i>' in line and year_re.search(line):
             ind = line.index('</i>')+4
             l1, l2 = '%s <br />' %(line[:ind]), line[ind:].replace('<br />', '')
             myprint('<span class="flr">%s</span>\n' %(l2), l1)
+        elif 'tth_sEc' in line:
+            state=1
+            buffer.append(line)
         elif '</h2>' in line:
-            myprint(line[1:].replace('<br />', ''))
-            # Get section title
             section_title = \
                 line.split(';')[2].split('</h2')[0].replace('<br />','').strip()
-            print >>sys.stderr, section_title, line
+            section_id = slugify(section_title)
+            s = buffer[0].index('tth_sEc')
+            e = buffer[0].index('"', s)
+            buffer[0] = ''.join([buffer[0][:s], section_id, buffer[0][e:]])
+            myprint(*buffer); buffer = []
+            myprint(line[1:].replace('<br />', ''))
+            # Get section title
             sections.append((section_id, section_title))
-        elif not tecli:
+            print >>sys.stderr, section_id, section_title, line
+            if state == 1:
+                myprint('<div class="textsection">\n')
+                state = 2
+        else:
             if '</body>' in line:
                 myprint(valid_links)
                 myprint('<ul class="vert_menu">\n%s\n</ul>' %'\n'.join([
                         '<li><a href="#%s">%s</a></li>' %x for x in sections]))
             myprint(line)
-        if 'tth_sEc' in line:
-            state=1
-            # Get section id
-            section_id = line.split('"')[1].strip()
-        elif state == 1 and '</h2>' in line:
-            myprint('<div class="textsection">\n')
-            state = 2
+
