@@ -15,6 +15,7 @@ all: $(resume).pdf $(cover).pdf
 %_.dvi : %_.tex
 	rm -f $*_.aux $*_.out
 	$(TEX) $*_
+	$(TEX) $*_
 	if(grep -q "Citation" $*_.log) then \
 	bibtex $*_; fi
 	while ($(TEX) $*_ ; \
